@@ -3,6 +3,13 @@ import { filterPackages } from '@alilc/lowcode-plugin-inject'
 import { Message, Dialog } from '@alifd/next';
 import { TransformStage } from '@alilc/lowcode-types';
 
+const getCurrentScenarioName = function () {
+  if (location.search) {
+    return new URLSearchParams(location.search.slice(1)).get('scenarioName') || 'index'
+  }
+  return 'index';
+}
+
 export const loadIncrementalAssets = () => {
   material?.onChangeAssets(() => {
     Message.success('[MCBreadcrumb] 物料加载成功');
@@ -145,15 +152,17 @@ export const loadIncrementalAssets = () => {
   });
 };
 
-export const preview = (scenarioName: string = 'index') => {
-  saveSchema(scenarioName);
+export const preview = () => {
+  const scenarioName = getCurrentScenarioName();
+  saveSchema();
   setTimeout(() => {
     const search = location.search ? `${location.search}&scenarioName=${scenarioName}` : `?scenarioName=${scenarioName}`;
     window.open(`./preview.html${search}`);
   }, 500);
 };
 
-export const saveSchema = async (scenarioName: string = 'index') => {
+export const saveSchema = async () => {
+  const scenarioName = getCurrentScenarioName();
   setProjectSchemaToLocalStorage(scenarioName);
 
   await setPackgesToLocalStorage(scenarioName);
@@ -169,7 +178,8 @@ export const saveSchema = async (scenarioName: string = 'index') => {
   Message.success('成功保存到本地');
 };
 
-export const resetSchema = async (scenarioName: string = 'index') => {
+export const resetSchema = async () => {
+  const scenarioName = getCurrentScenarioName();
   try {
     await new Promise<void>((resolve, reject) => {
       Dialog.confirm({
@@ -269,7 +279,9 @@ export const getPackagesFromLocalStorage = (scenarioName: string) => {
   return JSON.parse(window.localStorage.getItem(getLSName(scenarioName, 'packages')) || '{}');
 }
 
-export const getPageSchema = async (scenarioName: string = 'index') => {
+export const getPageSchema = async () => {
+  const scenarioName = getCurrentScenarioName();
+
   const pageSchema = getProjectSchemaFromLocalStorage(scenarioName).componentsTree?.[0]
 
   if (pageSchema) {

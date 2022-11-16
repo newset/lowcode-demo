@@ -1,6 +1,7 @@
 {
   "entry": {
-    "preview": "./src/preview.tsx"
+    "preview": "./src/preview.tsx",
+    "list": "./src/list.tsx"
   },
   "vendor": false,
   "devServer": {
