@@ -161,8 +161,8 @@ export const preview = () => {
   }, 500);
 };
 
-export const saveSchema = async () => {
-  const scenarioName = getCurrentScenarioName();
+export const saveSchema = async (name?: string) => {
+  const scenarioName = name || getCurrentScenarioName();
   setProjectSchemaToLocalStorage(scenarioName);
 
   await setPackgesToLocalStorage(scenarioName);
@@ -178,8 +178,8 @@ export const saveSchema = async () => {
   Message.success('成功保存到本地');
 };
 
-export const resetSchema = async () => {
-  const scenarioName = getCurrentScenarioName();
+export const resetSchema = async (name?: string) => {
+  const scenarioName = name || getCurrentScenarioName();
   try {
     await new Promise<void>((resolve, reject) => {
       Dialog.confirm({
@@ -279,10 +279,10 @@ export const getPackagesFromLocalStorage = (scenarioName: string) => {
   return JSON.parse(window.localStorage.getItem(getLSName(scenarioName, 'packages')) || '{}');
 }
 
-export const getPageSchema = async () => {
-  const scenarioName = getCurrentScenarioName();
+export const getPageSchema = async (scenarioName: string) => {
+  const name = scenarioName || getCurrentScenarioName();
 
-  const pageSchema = getProjectSchemaFromLocalStorage(scenarioName).componentsTree?.[0]
+  const pageSchema = getProjectSchemaFromLocalStorage(name).componentsTree?.[0]
 
   if (pageSchema) {
     return pageSchema;
