@@ -4,6 +4,7 @@ import React from 'react';
 const affix = ':projectSchema';
 
 const ListPage = () => {
+  const url = location.pathname.replace(/(\w+).html/, 'index.html');
   const pages = Object.keys(localStorage).filter(name => name.endsWith(affix));
 
   return <div style={{width: 400, margin: '20px auto'}}>
@@ -13,7 +14,7 @@ const ListPage = () => {
       pages.map(page => {
         const name = page.replace(affix, '');
         return <li key={page} style={{marginBottom: 20,}}>
-          <a href={`/index.html?scenarioName=${name}`}>{name.toUpperCase()}</a>
+          <a href={`${url}?scenarioName=${name}`}>{name.toUpperCase()}</a>
         </li>
       })
     }
